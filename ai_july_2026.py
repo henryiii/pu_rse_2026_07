@@ -10,6 +10,7 @@ app = marimo.App(
 @app.cell
 def _():
     import json
+    import sys
     from pathlib import Path
 
     import altair as alt
@@ -17,7 +18,16 @@ def _():
     import polars as pl
 
 
-    return Path, alt, json, mo, pl
+    def read_json(name):
+        loc = mo.notebook_location() / "public" / name
+        if sys.platform == "emscripten":
+            import pyodide.http
+
+            return json.load(pyodide.http.open_url(str(loc)))
+        return json.loads(Path(str(loc)).read_text())
+
+
+    return alt, mo, pl, read_json
 
 
 @app.cell(hide_code=True)
@@ -143,7 +153,7 @@ def _(mo):
 
 
 @app.cell
-def usage_data(Path, json, pl):
+def usage_data(pl, read_json):
     family_colors = {
         "Claude": "#2a78d6",
         "GPT": "#1baf7a",
@@ -165,8 +175,9 @@ def usage_data(Path, json, pl):
         return "Other OSS"
 
 
-    usage_files = sorted(Path().glob("usage_*.json"))
-    _machines = [json.loads(_p.read_text()) for _p in usage_files]
+    # No filesystem glob in WASM; list the files explicitly
+    usage_files = ["usage_intel.json", "usage_m1.json", "usage_m5.json"]
+    _machines = [read_json(_n) for _n in usage_files]
 
     usage_totals = {
         _key: sum(_m["totals"][_key] for _m in _machines)
@@ -420,8 +431,8 @@ def _(mo):
 
 
 @app.cell
-def _(json, pl):
-    data = json.load(open("ai_prs_2026.json"))
+def _(pl, read_json):
+    data = read_json("ai_prs_2026.json")
     df = (
       pl.DataFrame([{"day": d, **v} for d, v in data.items()])
       .with_columns(pl.col("day").str.to_date(),
