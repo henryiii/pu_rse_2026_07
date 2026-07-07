@@ -33,7 +33,7 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # AI tools in OSS development
+    # 🤖 AI tools in OSS development
     ## Henry Schreiner
     Princeton University RSE group meeting • 7/8/2026
     """)
@@ -43,7 +43,7 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Resources:
+    ## 📚 Resources:
 
     * [Starting with Agentic AI](https://iscinumpy.dev/post/starting-with-agentic-ai/)
     * [Claude Code Reviews with Fable](https://iscinumpy.dev/post/claude-code-reviews/)
@@ -56,14 +56,14 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## Timeline
+    ## 🗓️ Timeline
 
-    * _November 2025: Claude Opus 4.5 + Claude Code redefines Agentic AI_
-    * March 2026: I try Copilot (Claude Sonnet 4.6) to make flake8-lazy
-    * April 2026: I use up my Copilot credits for the first time
-    * May 2026: I use Open Source models via NRP.io heavily
-    * June 2026: I get and use a Claude OSS (Max 20x) subscription
-    * June 2026: I also get access to the Princeton AI Sandbox (for GPT 5.5)
+    * 🚀 _November 2025: Claude Opus 4.5 + Claude Code redefines Agentic AI_
+    * 🧪 March 2026: I try Copilot (Claude Sonnet 4.6) to make **flake8-lazy**
+    * 💸 April 2026: I use up my Copilot credits for the first time
+    * 🌐 May 2026: I use Open Source models via NRP.io heavily
+    * 🤖 June 2026: I get and use a Claude OSS (Max 20x) subscription
+    * 🏛️ June 2026: I also get access to the Princeton AI Sandbox (for GPT 5.5)
     """)
     return
 
@@ -71,83 +71,32 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## flake8-lazy
-
-    Why is this significant?
+    ### flake8-lazy - why is this significant?
 
     It was developed about two days after the first Python 3.15 alpha with lazy imports!
-
-    _No prior model knowledge of lazy imports in Python!_
     """)
     return
 
 
 @app.cell
 def _(mo):
-    mo.md(r"""
-    ## Mental model
-
-    * **Model**: reasoning and useful general facts
-    * **Context**: knowledge of your project and surrounding information
-
-    Within a model, the context is what controls the output.
-
-    A **harness** is mostly about managing context so you can control the output.
-
-    * **Too little**: won't match your coding style, weird decisions, fails to see big-picture
-    * **Too much**: Starts to forget, gets confused. (Model dependent!)
-    """)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.vstack([
-        mo.md(r"""
-    ## What is it good for?
-
-    Reducing the amount of time you spend on:
-    """),
-        mo.hstack(
-            [
-                mo.md(r"""
-    * Review
-    * Exploration
-    * Prototyping
-    * Contributing to an unfamiliar codebase
-    * Consistency
-    * Fixing bugs/tests/CI
-    * Writing tests
-    """),
-                mo.md(r"""
-    * Bug hunts / cleanup
-    * Throwaway work (plots, scripts)
-    * Anything you don't have time for
-    * Profiling / optimization
-    * Anything web-related
-    * Categorizing issues
-    * Anything with boilerplate
-    """),
-            ],
-            widths=[1, 1],
-            gap=2,
-            align="start",
-        ),
-        mo.md(r"""
-    And it scales, once you have something working you can launch many agents or reuse it!
-    """),
-    ])
+    mo.callout(
+        mo.md(r"""_No prior model knowledge of lazy imports in Python!_"""),
+        kind="success",
+    )
     return
 
 
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## Usage
+    ## 📊 Usage
 
     `uvx agentsview usage daily --since 2026-01-01 --format json --breakdown`
 
     Using Fable with marimo pairing to analyse here
+
+    Copilot online usage not included (`@copilot`, Copilot code review, etc)
     """)
     return
 
@@ -419,7 +368,7 @@ def projects_by_tokens(alt, family_colors, pl, project_df, project_family_df):
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## PRs with AI assistance
+    ## 📈 PRs with AI assistance
 
     > Since Jan 1 2026, how many PRs did I make each day, and how many were made with AI assistance? (AI assistance will have `:robot:` or `Assisted-by` in the description. You can also check to see if any commits have an `Assisted-by:` trailer in them. This should be written to a json file so I can make plots later, like `ai_prs_2026.json`.
 
@@ -591,8 +540,88 @@ def ai_share_by_week(alt, mo, weekly_prs):
 
 @app.cell
 def _(mo):
+    mo.vstack([
+        mo.md(r"""## 🧠 Mental model"""),
+        mo.hstack(
+            [
+                mo.md(r"""
+    * **Model**: reasoning and useful general facts
+    * **Context**: knowledge of your project and surroundings
+
+    Within a model, the **context** controls the output.
+
+    A **harness** is mostly about managing context so *you* control the output.
+    """),
+                mo.mermaid(r"""
+    graph LR
+        M["🧠 Model"] --> O["🎯 Output"]
+        H["⚙️ Harness"] -->|manages| C["📁 Context"] --> O
+    """),
+            ],
+            widths=[1, 1],
+            gap=2,
+            align="center",
+        ),
+        mo.hstack(
+            [
+                mo.callout(mo.md(r"""**Too little context**
+
+    Won't match your coding style, weird decisions, fails to see the big picture."""), kind="warn"),
+                mo.callout(mo.md(r"""**Too much context**
+
+    Starts to forget, gets confused. (Model dependent!)"""), kind="danger"),
+            ],
+            widths="equal",
+            gap=2,
+        ),
+    ])
+    return
+
+
+@app.cell
+def _(mo):
+    mo.vstack([
+        mo.md(r"""
+    ## 🛠️ What is it good for?
+
+    Reducing the amount of time you spend on:
+    """),
+        mo.hstack(
+            [
+                mo.md(r"""
+    * Review
+    * Exploration
+    * Prototyping
+    * Contributing to an unfamiliar codebase
+    * Consistency
+    * Fixing bugs/tests/CI
+    * Writing tests
+    """),
+                mo.md(r"""
+    * Bug hunts / cleanup
+    * Throwaway work (plots, scripts)
+    * Anything you don't have time for
+    * Profiling / optimization
+    * Anything web-related
+    * Categorizing issues
+    * Anything with boilerplate
+    """),
+            ],
+            widths=[1, 1],
+            gap=2,
+            align="start",
+        ),
+        mo.md(r"""
+    And it scales, once you have something working you can launch many agents or reuse it!
+    """),
+    ])
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(r"""
-    ## My setup
+    ## ⚙️ My setup
 
     * AI forced to add an "AI text below" header on all PR/issue text
     * `Assisted-by: ClaudeCode:claude-fable-5` trailers on commits (manual or AI)
@@ -625,14 +654,39 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    mo.md(r"""
-    ## Claude code tips
+    mo.vstack([
+        mo.md(r"""
+    ## 💡 Claude Code tips
 
     * `ccstatusline` (`npx`) is great (much better than using AI to write a status line!)
     * Write a hook to check for worktrees writing to non-worktree paths and *warn* (never force in hooks)
     * Global skills can be made name-only (one at a time) - save on tokens
     * Claude can understand itself: ask it to run 20 subagents, but max at 5 at a time, and it will do it.
-    * How you prompt depends on the model size: Sonnet needs every detail, Opus takes a little direction, and Fable you just point very gently
+    * How you prompt depends on the model size:
+    """),
+        mo.hstack(
+            [
+                mo.callout(mo.md(r"""**Sonnet**
+
+    Needs every detail"""), kind="warn"),
+                mo.callout(mo.md(r"""**Opus**
+
+    Takes a little direction"""), kind="info"),
+                mo.callout(mo.md(r"""**Fable**
+
+    Just point very gently"""), kind="success"),
+            ],
+            widths="equal",
+            gap=1,
+        ),
+    ])
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
+    # 🔍 A closer look at specific examples
     """)
     return
 
@@ -640,17 +694,11 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # A closer look at specific examples
-    """)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""
-    ## Sweeping code reviews
+    ## 🔎 Sweeping code reviews
 
     (You probably knew this was coming!)
+
+    https://iscinumpy.dev/post/claude-code-reviews
 
     > Review this project for bugs, performance, simplifications, and modernizations
 
@@ -662,9 +710,97 @@ def _(mo):
 
 
 @app.cell
+def review_overall_stats(mo):
+    mo.hstack(
+        [
+            mo.stat(
+                "~400",
+                label="Bugs found",
+                caption="plus 400+ perf/cleanup fixes",
+                bordered=True,
+            ),
+            mo.stat(
+                "30+",
+                label="Projects reviewed",
+                caption="mine and by request",
+                bordered=True,
+            ),
+            mo.stat(
+                "~100%",
+                label="Merge rate",
+                caption="on decided PRs",
+                bordered=True,
+            ),
+            mo.stat(
+                "$20\u201360",
+                label="Cost per review",
+                caption="Fable, comprehensive",
+                bordered=True,
+            ),
+        ],
+        widths="equal",
+    )
+    return
+
+
+@app.cell
+def review_standout(mo):
+    mo.vstack([
+        mo.md(r"""### 🔎 Sweeping-review finds"""),
+        mo.hstack(
+            [
+                mo.stat(
+                    "Slipped past",
+                    label="CLI11 · 100% coverage",
+                    caption="two flags broke only when combined (#1358)",
+                    bordered=True,
+                ),
+                mo.stat(
+                    "Data loss",
+                    label="nox",
+                    caption="one non-ASCII name wiped every session (#1108)",
+                    bordered=True,
+                ),
+                mo.stat(
+                    "15 bugs",
+                    label="scikit-build-core",
+                    caption="4 serious, on a project I wrote from scratch (#1317)",
+                    bordered=True,
+                ),
+            ],
+            widths="equal",
+        ),
+        mo.hstack(
+            [
+                mo.stat(
+                    f"50% faster",
+                    label="pyhs3",
+                    caption=f"From 119 s to 73.4 s",
+                    bordered=True,
+                ),
+                mo.stat(
+                    f"Regression caught",
+                    label="packaging",
+                    caption=f"Caught before release",
+                    bordered=True,
+                ),
+                mo.stat(
+                    "Off-by-one",
+                    label="pybind11",
+                    caption="stale Python 2 header shifted error lines (#6089)",
+                    bordered=True,
+                ),
+            ],
+            widths="equal",
+        )
+    ])
+    return
+
+
+@app.cell
 def _(mo):
     mo.vstack([
-        mo.md(r"""## Code review: packaging"""),
+        mo.md(r"""## :package: Code review: packaging"""),
         mo.hstack(
             [
                 mo.md(r"""
@@ -726,7 +862,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## Don't (only?) make AI do what you'd do
+    ## 🔀 Don't (only?) make AI do what you'd do
 
     ### Make AI do what you would not do
     """)
@@ -736,7 +872,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## Scikit-build-core: Testing ~20 downstream projects
+    ## 🧪 Scikit-build-core: Testing ~20 downstream projects
 
     * I had a `nox -s downstream -- <...>` that can test downstream projects
     * I had Claude write a SKILL.md for testing downstream projects
@@ -768,7 +904,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## Developing against downstream
+    ## 🔗 Developing against downstream
 
     * [pytorch/pytorch#180247](https://github.com/pytorch/pytorch/pull/180247) moves pytorch to scikit-build-core (from setuptools)
     * I asked Claude for a report on the pain points of the transition [scikit-build/scikit-build-core#1367](https://github.com/scikit-build/scikit-build-core/issues/1367)
@@ -782,7 +918,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.vstack([
-        mo.md(r"""## Working through issues"""),
+        mo.md(r"""## 🐛 Working through issues"""),
         mo.hstack(
             [
                 mo.md(r"""
@@ -813,8 +949,9 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    mo.md(r"""
-    ## scikit-build (classic) backend
+    mo.vstack([
+        mo.md(r"""
+    ## 🏗️ scikit-build (classic) backend
 
     * Tests change due to removals (mostly `setup.py` commands)
     * Spanned three repos, including [scikit-build-sample-projects](https://github.com/scikit-build/scikit-build-sample-projects)
@@ -824,9 +961,12 @@ def _(mo):
     * All the test adjustments and replacements, and tested the samples repo
     * Found and fixed **seven bugs** in scikit-build-core's setuptools plugin
         * Located my local checkout, applied fixes there, and offered a PR!
-
-    > I was really impressed, especially at how it was happy (proactive, even) to work in multiple repos at the same time.
-    """)
+    """),
+        mo.callout(
+            mo.md(r"""_I was really impressed, especially at how it was happy (proactive, even) to work in multiple repos at the same time._"""),
+            kind="success",
+        ),
+    ])
     return
 
 
@@ -835,7 +975,7 @@ def _(mo):
     mo.hstack(
         [
             mo.md(r"""
-    ## Beautiful Hugo
+    ## 🎨 Beautiful Hugo
 
     * Made over 100 PRs in a day with GLM 5.1
     * Lots of polish
@@ -868,12 +1008,41 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## GPU hackathon
+    ## ⚡ GPU hackathon
 
     * Great for exploring a new codebase
     * Found bugs, was able to find missing terms
     * Eerily good at matching what I and the NVIDIA mentor plans
     """)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
+    ### AI could profile and propose speedups locally.
+
+    * For GPU, I explained that I couldn't run on the GPU node, and I copy-pasted its sample code and results back and forth (along with profiles)
+    * Could predict speedups on GPU to a few percent!
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.vstack([
+        mo.md(r"""
+    A few results:
+
+    * We could probably have accelerated GPU more; I know a lot of numba so knew to push that the most, and it was local
+    * They were so happy that they could simulate scales impossible before
+    * They were all using AI by the end of the session
+    """),
+        mo.callout(
+            mo.md(r"""_"The best ad we've seen for AI is watching you use it for 30 minutes"_"""),
+            kind="success",
+        ),
+    ])
     return
 
 
@@ -892,9 +1061,15 @@ def _(mo):
                 label="GPU",
                 caption=f"Speedup from original version",
                 bordered=True,
+            ),
+            mo.stat(
+                f"Missing term",
+                label="Jacobian",
+                caption=f"Computed and solved numeric discrepancy",
+                bordered=True,
             )
         ],
-        widths="equal",
+        justify="space-around",
     )
     return
 
@@ -902,38 +1077,14 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    AI could profile and propose speedups locally.
-
-    * For GPU, I explained that I couldn't run on the GPU node, and I copy-pasted its sample code and results back and forth (along with profiles)
-    * Could predict speedups on GPU to a few percent!
-    """)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""
-    A few results:
-
-    * We could probably have accelerated GPU more; I know a lot of numba so knew to push that the most, and it was local
-    * They were so happy that they could simulate scales impossible before
-    * They were all using AI by the end of the session
-
-    > "The best ad we've seen for AI is watching you use it for 30 minutes"
-    """)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""
-    ## Other successes
+    ## 🏆 Other successes
 
     * Solved bugs that I didn't have time to work on from up to 6 years ago
     * Made scikit-build-core's test suite 40% faster with the same coverage (Fable)
     * Reworked flake8-lazy to do one pass instead of 18, 4.5x faster, 200 LoC less (Fable)
     * Scikit-build-core editable installs bugs worked out
     * Solved flaky tests in awkward-array
+    * My [projects page](https://iscinumpy.dev/page/projects/)
     """)
     return
 
@@ -941,13 +1092,14 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    ## Making these slides
+    ## 🎬 Making these slides
 
     * Created in marimo
-    * Activated the AI bridge skill in Claude
+    * Activated the AI bridge skill in Claude (Fable and Opus)
     * Built the json data, dropped it in, and asked for plots
     * Layout on some slides (split layout, shrink some text, etc.)
     * Summaries for a couple of issues
+    * Graphical touchups (emojis, callouts, etc)
     """)
     return
 
