@@ -25,7 +25,7 @@ def _(mo):
     mo.md(r"""
     # AI tools in OSS development
     ## Henry Schreiner
-    Princeton Univerity RSE group meeting • 7/8/2026
+    Princeton University RSE group meeting • 7/8/2026
     """)
     return
 
@@ -33,7 +33,7 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Resources:
+    ## Resources:
 
     * [Starting with Agentic AI](https://iscinumpy.dev/post/starting-with-agentic-ai/)
     * [Claude Code Reviews with Fable](https://iscinumpy.dev/post/claude-code-reviews/)
@@ -46,7 +46,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Timeline
+    ## Timeline
 
     * _November 2025: Claude Opus 4.5 + Claude Code redefines Agentic AI_
     * March 2026: I try Copilot (Claude Sonnet 4.6) to make flake8-lazy
@@ -61,13 +61,13 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # flake8-lazy
+    ## flake8-lazy
 
     Why is this significant?
 
     It was developed about two days after the first Python 3.15 alpha with lazy imports!
 
-    _No prior model knoledge of lazy imports in Python!_
+    _No prior model knowledge of lazy imports in Python!_
     """)
     return
 
@@ -75,16 +75,16 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Mental model
+    ## Mental model
 
     * **Model**: reasoning and useful general facts
-    * **Context**: knoledge of your project and surrounding information
+    * **Context**: knowledge of your project and surrounding information
 
     Within a model, the context is what controls the output.
 
     A **harness** is mostly about managing context so you can control the output.
 
-    * **Too little**: won't match your coding style, weird descisions, fails to see big-picture
+    * **Too little**: won't match your coding style, weird decisions, fails to see big-picture
     * **Too much**: Starts to forget, gets confused. (Model dependent!)
     """)
     return
@@ -94,7 +94,7 @@ def _(mo):
 def _(mo):
     mo.vstack([
         mo.md(r"""
-    # What is it good for?
+    ## What is it good for?
 
     Reducing the amount of time you spend on:
     """),
@@ -104,13 +104,13 @@ def _(mo):
     * Review
     * Exploration
     * Prototyping
-    * Contributing to an unfamilar codebase
+    * Contributing to an unfamiliar codebase
     * Consistency
     * Fixing bugs/tests/CI
     * Writing tests
     """),
                 mo.md(r"""
-    * Bug hunts / cleanup (incl. "vibed" code!)
+    * Bug hunts / cleanup
     * Throwaway work (plots, scripts)
     * Anything you don't have time for
     * Profiling / optimization
@@ -133,7 +133,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Usage
+    ## Usage
 
     `uvx agentsview usage daily --since 2026-01-01 --format json --breakdown`
 
@@ -246,7 +246,6 @@ def usage_data(Path, json, pl):
         .agg(pl.sum("est_tokens").alias("output_tokens"))
         .sort("project", "family_order")
     )
-
     return (
         daily_df,
         family_colors,
@@ -289,7 +288,6 @@ def usage_kpis(mo, total_sessions, usage_days, usage_files, usage_totals):
         ],
         widths="equal",
     )
-
     return
 
 
@@ -339,7 +337,6 @@ def tokens_by_family(alt, daily_df, family_colors, mo):
             mo.accordion({"Data table": mo.ui.table(daily_df, page_size=10)}),
         ]
     )
-
     return
 
 
@@ -405,16 +402,15 @@ def projects_by_tokens(alt, family_colors, pl, project_df, project_family_df):
         .configure_title(color="#0b0b0b", fontSize=14, anchor="start", subtitleColor="#898781")
     )
     projects_chart
-
     return
 
 
 @app.cell
 def _(mo):
     mo.md(r"""
-    # PRs with AI assistence
+    ## PRs with AI assistance
 
-    > Since Jan 1 2026, how many PRs did I make each day, and how many were made with AI assistence? (AI assistence will have `:robot:` or `Assisted-by` in the description. You can also check to see if any commits have an `Assisted-by:` trailer in them. This should be written to a json file so I can make plots later, like `ai_prs_2026.json`.
+    > Since Jan 1 2026, how many PRs did I make each day, and how many were made with AI assistance? (AI assistance will have `:robot:` or `Assisted-by` in the description. You can also check to see if any commits have an `Assisted-by:` trailer in them. This should be written to a json file so I can make plots later, like `ai_prs_2026.json`.
 
     ...
 
@@ -442,6 +438,7 @@ def ai_prs_by_day(alt, df, mo, pl):
     weekly_prs = (
         df.group_by(pl.col("day").dt.truncate("1w").alias("week"))
         .agg(pl.sum("ai_assisted"), pl.sum("non_ai"), pl.sum("total"))
+        .filter(pl.col("week").dt.offset_by("6d") <= df["day"].max())  # drop partial week
         .with_columns((pl.col("ai_assisted") / pl.col("total")).alias("ai_share"))
         .sort("week")
     )
@@ -520,7 +517,6 @@ def ai_prs_by_day(alt, df, mo, pl):
             mo.accordion({"Data table": mo.ui.table(weekly_prs, page_size=10)}),
         ]
     )
-
     return (weekly_prs,)
 
 
@@ -579,20 +575,19 @@ def ai_share_by_week(alt, mo, weekly_prs):
             mo.accordion({"Data table": mo.ui.table(weekly_prs, page_size=10)}),
         ]
     )
-
     return
 
 
 @app.cell
 def _(mo):
     mo.md(r"""
-    # My setup
+    ## My setup
 
     * AI forced to add an "AI text below" header on all PR/issue text
     * `Assisted-by: ClaudeCode:claude-fable-5` trailers on commits (manual or AI)
     * Regression test before bugfix
     * Try to keep commits short (not really effective)
-    * Use prek -a --quiet`, `uv run`, `python3`
+    * Use `prek -a --quiet`, `uv run`, `python3`
     """)
     return
 
@@ -608,7 +603,7 @@ def _(mo):
 
     When fixing bugs, add the regression test first and confirm it fails without the fix if possible.
 
-    If you make a commit, follow conventional commits and and add a trailer: `Assisted-by: <harness>:<model>`, where `<harness>` is the current agent harness (like ClaudeCode), and `<model>` is the AI model (Like claude-opus-4.8).
+    If you make a commit, follow conventional commits and add a trailer: `Assisted-by: <harness>:<model>`, where `<harness>` is the current agent harness (like ClaudeCode), and `<model>` is the AI model (Like claude-opus-4.8).
 
     Prefix PR descriptions and comments on PRs with the line ":robot: _AI text below_ :robot:" to indicate you are an agent speaking on a user's behalf.
 
@@ -620,7 +615,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Claude code tips
+    ## Claude code tips
 
     * `ccstatusline` (`npx`) is great (much better than using AI to write a status line!)
     * Write a hook to check for worktrees writing to non-worktree paths and *warn* (never force in hooks)
@@ -642,7 +637,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Sweeping code reviews
+    ## Sweeping code reviews
 
     (You probably knew this was coming!)
 
@@ -658,7 +653,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.vstack([
-        mo.md(r"""# Code review: packaging"""),
+        mo.md(r"""## Code review: packaging"""),
         mo.hstack(
             [
                 mo.md(r"""
@@ -720,9 +715,9 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Don't (only?) make AI do what you'd do
+    ## Don't (only?) make AI do what you'd do
 
-    ## Make AI do what you would not do
+    ### Make AI do what you would not do
     """)
     return
 
@@ -730,7 +725,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Scikit-build-core: Testing ~20 downstream projects
+    ## Scikit-build-core: Testing ~20 downstream projects
 
     * I had a `nox -s downstream -- <...>` that can test downstream projects
     * I had Claude write a SKILL.md for testing downstream projects
@@ -762,7 +757,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Developing against downstream
+    ## Developing against downstream
 
     * [pytorch/pytorch#180247](https://github.com/pytorch/pytorch/pull/180247) moves pytorch to scikit-build-core (from setuptools)
     * I asked Claude for a report on the pain points of the transition [scikit-build/scikit-build-core#1367](https://github.com/scikit-build/scikit-build-core/issues/1367)
@@ -776,13 +771,13 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.vstack([
-        mo.md(r"""# Working through issues"""),
+        mo.md(r"""## Working through issues"""),
         mo.hstack(
             [
                 mo.md(r"""
     Scikit-build-core had 140+ open issues. **Now at 20.**
 
-    * I asked Claude to find all the reproducable bug reports
+    * I asked Claude to find all the reproducible bug reports
     * I asked for subagents to make fixes: 10 PRs
     * 6-7 mergable, ~2 needed extra work, 1 closed
 
@@ -808,7 +803,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # scikit-build (classic) backend
+    ## scikit-build (classic) backend
 
     * Tests change due to removals (mostly `setup.py` commands)
     * Spanned three repos, including [scikit-build-sample-projects](https://github.com/scikit-build/scikit-build-sample-projects)
@@ -829,13 +824,13 @@ def _(mo):
     mo.hstack(
         [
             mo.md(r"""
-    # Beautiful Hugo
+    ## Beautiful Hugo
 
     * Made over 100 PRs in a day with GLM 5.1
     * Lots of polish
-    * Updated bootstrap 3 -> 4 -> 5 (I tried and failed on 3 -> 4 years before)
+    * Updated bootstrap 3→4→5 (I tried and failed on 3→4)
     * Many requested features
-    * Upstreamed my additions from iscinumpy
+    * Upstreamed additions from iscinumpy
     """),
             mo.image(
                 "public/old_hugo.png",
@@ -862,11 +857,11 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # GPU hackathon
+    ## GPU hackathon
 
     * Great for exploring a new codebase
     * Found bugs, was able to find missing terms
-    * Earily good at matching what I and the NVIDIA mentor plans
+    * Eerily good at matching what I and the NVIDIA mentor plans
     """)
     return
 
@@ -876,15 +871,15 @@ def _(mo):
     mo.hstack(
         [
             mo.stat(
-                f"1000x",
+                f"1,000x",
                 label="CPU",
-                caption=f"Speedup on CPU",
+                caption=f"From original CPU numba version",
                 bordered=True,
             ),
             mo.stat(
-                f"1000x",
+                f"1,000x",
                 label="GPU",
-                caption=f"Speedup on GPU",
+                caption=f"Speedup from original version",
                 bordered=True,
             )
         ],
@@ -898,7 +893,7 @@ def _(mo):
     mo.md(r"""
     AI could profile and propose speedups locally.
 
-    * For GPU, I explained that I couldn't run on the GPU note, and I copy-pasted it's sample codes and results back and forth (along with profiles)
+    * For GPU, I explained that I couldn't run on the GPU node, and I copy-pasted its sample code and results back and forth (along with profiles)
     * Could predict speedups on GPU to a few percent!
     """)
     return
@@ -921,7 +916,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Other successes
+    ## Other successes
 
     * Solved bugs that I didn't have time to work on from up to 6 years ago
     * Made scikit-build-core's test suite 40% faster with the same coverage (Fable)
@@ -935,7 +930,7 @@ def _(mo):
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Making these slides
+    ## Making these slides
 
     * Created in marimo
     * Activated the AI bridge skill in Claude
